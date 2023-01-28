@@ -25,6 +25,7 @@ public class ParkingLot {
     public ParkingLot(String name, String address) {
         this.name = name;
         this.address = address;
+        this.spotList = new ArrayList<>();
     }
 
     public int getId() {
