@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
     @Autowired
     ReservationServiceImpl reservationService;
-    @Autowired
-    private ReservationRepository reservationRepository;
 
     @PostMapping("/reserveSpot")
     public Reservation reserveSpot(@RequestParam Integer userId, @RequestParam Integer parkingLotId, @RequestParam Integer timeInHours, @RequestParam Integer numberOfWheels) throws Exception{
