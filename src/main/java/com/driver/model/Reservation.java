@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private int numberOfHours;
@@ -36,6 +36,10 @@ public class Reservation {
         this.user = user;
         this.spot = spot;
         this.payment = payment;
+    }
+
+    public Reservation(int numberOfHours) {
+        this.numberOfHours = numberOfHours;
     }
 
     public int getId() {

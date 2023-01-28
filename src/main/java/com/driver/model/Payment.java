@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;    //auto or not....no idea
 
     private boolean paymentCompleted;
@@ -27,6 +27,11 @@ public class Payment {
         this.paymentCompleted = paymentCompleted;
         this.paymentMode = paymentMode;
         this.reservation = reservation;
+    }
+
+    public Payment(boolean paymentCompleted, PaymentMode paymentMode) {
+        this.paymentCompleted = paymentCompleted;
+        this.paymentMode = paymentMode;
     }
 
     public int getId() {

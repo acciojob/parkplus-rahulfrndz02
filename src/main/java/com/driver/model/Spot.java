@@ -8,7 +8,7 @@ import java.util.List;
 @Table
 public class Spot {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private SpotType spotType;
@@ -35,6 +35,12 @@ public class Spot {
         this.occupied = occupied;
         this.parkingLot = parkingLot;
         this.reservationList = reservationList;
+    }
+
+    public Spot(SpotType spotType, int pricePerHour, boolean occupied) {
+        this.spotType = spotType;
+        this.pricePerHour = pricePerHour;
+        this.occupied = occupied;
     }
 
     public int getId() {
