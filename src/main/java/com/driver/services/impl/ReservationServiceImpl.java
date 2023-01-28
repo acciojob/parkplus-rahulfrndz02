@@ -23,6 +23,18 @@ public class ReservationServiceImpl implements ReservationService {
     ParkingLotRepository parkingLotRepository3;
     @Override
     public Reservation reserveSpot(Integer userId, Integer parkingLotId, Integer timeInHours, Integer numberOfWheels) throws Exception {
+        ParkingLot parkingLot=parkingLotRepository3.findById(parkingLotId).get();
+        List<Spot> spotList=parkingLot.getSpotList();
 
+        int min =Integer.MIN_VALUE;
+        Spot spots = null;
+        for(Spot spot:spotList){
+            if(timeInHours*spot.getPricePerHour()<min){
+                spots=spot;
+                min=timeInHours*spot.getPricePerHour();
+            }
+        }
+        parkingLot.getSpotList().add(spots);
+        return null;
     }
 }
