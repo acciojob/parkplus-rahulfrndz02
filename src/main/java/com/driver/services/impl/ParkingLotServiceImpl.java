@@ -4,6 +4,7 @@ import com.driver.model.ParkingLot;
 import com.driver.model.Spot;
 import com.driver.model.SpotType;
 import com.driver.repository.ParkingLotRepository;
+import com.driver.repository.PaymentRepository;
 import com.driver.repository.SpotRepository;
 import com.driver.services.ParkingLotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,12 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     ParkingLotRepository parkingLotRepository1;
     @Autowired
     SpotRepository spotRepository1;
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @Override
     public ParkingLot addParkingLot(String name, String address) {
-        ParkingLot parkingLot = new ParkingLot();
-        parkingLot.setName(name);
-        parkingLot.setAddress(address);
-
+        ParkingLot parkingLot = new ParkingLot(name, address);
         parkingLotRepository1.save(parkingLot);
         return parkingLot;
     }
@@ -34,19 +34,21 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         ParkingLot parkingLot = parkingLotRepository1.findById(parkingLotId).get();
       //  List<Spot> spotList = spotRepository1.findAll();
         Spot spot = new Spot();
-        int price =0;
-        if(numberOfWheels == 2){
-            price = price + pricePerHour;
+        if(numberOfWheels <= 2){
             spot.setSpotType(SpotType.TWO_WHEELER);
-        } else if (numberOfWheels == 4) {
-            price = price + pricePerHour;
+        }else if (numberOfWheels > 2 && numberOfWheels <=4 ){
             spot.setSpotType(SpotType.FOUR_WHEELER);
-        }else{
-            price = price + pricePerHour;
+        }else if(numberOfWheels > 4){
             spot.setSpotType(SpotType.OTHERS);
         }
-       parkingLot.setSpotList((List<Spot>) spot);
-        spotRepository1.save(spot);
+        spot.setPricePerHour(pricePerHour);
+        spot.setOccupied(false);
+        spot.setParkingLot(parkingLot);
+
+        List<Spot> spotList = parkingLot.getSpotList();
+        spotList.add(spot);
+        parkingLot.setSpotList(spotList);
+        parkingLotRepository1.save(parkingLot);
         return spot;
 
     }
@@ -58,9 +60,16 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     @Override
     public Spot updateSpot(int parkingLotId, int spotId, int pricePerHour) {
+        if(spotRepository1.findById(spotId) == null) return null;
+        if(parkingLotRepository1.findById(parkingLotId) == null) return null;
+
         ParkingLot parkingLot = parkingLotRepository1.findById(parkingLotId).get();
         Spot spot = spotRepository1.findById(spotId).get();
+
         spot.setPricePerHour(pricePerHour);
+        spot.setParkingLot(parkingLot);
+
+        parkingLotRepository1.save(parkingLot);
         spotRepository1.save(spot);
 
         return spot;
